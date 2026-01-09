@@ -137,6 +137,9 @@ def read_extensometer(location, plot_type="RF"):
             | "MMW"
             | "M4T"
             | "MSW"
+            | "HGM"
+            | "HGG"
+            | "HGR"
         ):
             extensometer_depth = EXTENSOMETER_DEPTHS[f"{location}"]
             filename_plot_type = f"{location}_extensometer.csv"
@@ -207,6 +210,9 @@ def read_surface_level(location, plot_type="RF"):
             | "MMW"
             | "M4T"
             | "MSW"
+            | "HGM"
+            | "HGG"
+            | "HGR"
         ):
             plot_type = ""
         case _:
@@ -296,6 +302,12 @@ def read_soilprofile(location, location_fullname, plot_type="RF", language="engl
             sheetname = "Middelweg"
         case "MSW":
             sheetname = "Spoorweglaan"
+        case "HGM":
+            sheetname = "Museumsite"
+        case "HGG":
+            sheetname = "Perceel 3 - greppel"
+        case "HGR":
+            sheetname = "Perceel 3 - referentie"
 
     if location == "ZEG" and plot_type == "MS":
         sheetname = "ZEG_003"
@@ -312,6 +324,10 @@ def read_soilprofile(location, location_fullname, plot_type="RF", language="engl
         case "M4T" | "MMW" | "MSW":
             filepath = basedir.joinpath(
                 "data/3-processed/Lithologie en ankerdiepten restveengebied.xlsx"
+            )
+        case "HGM" | "HGG" | "HGR":
+            filepath = basedir.joinpath(
+                "data/3-processed/Lithologie en ankerdiepten Hegewarren.xlsx"
             )
         case _:
             filepath = basedir.joinpath(

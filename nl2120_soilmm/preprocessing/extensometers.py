@@ -27,6 +27,8 @@ def load_column_letters(location_fullname):
             anchor_columns = list(letter_range("E", "I"))
         case "Rouveen_parcel09":
             anchor_columns = list(letter_range("D", "G"))
+        case "Hegewarren-Museum" | "Hegewarren-Greppel" | "Hegewarren-Ref":
+            anchor_columns = list(letter_range("F", "K"))
         case _:
             # anchor_columns = list(letter_range("M", "S"))
             anchor_columns = list(letter_range("G", "M"))
@@ -271,6 +273,46 @@ def update_extensometer_data_moordrecht(location, location_fullname, period="h")
     return data
 
 
+def update_extensometer_data_hegewarren(location, location_fullname, period="h"):
+
+    basedir = Path(r"n:/Projects/11210000/11210448/B. Measurements and calculations")
+    path_to_data = basedir.joinpath("Extensometers", f"{location_fullname}.xlsm")
+
+    outputdir = Path(
+        r"n:/Projects/11211000/11211391/B. Measurements and calculations/Bodembeweging/data/2-interim"
+    )
+
+    anchor_columns = load_column_letters(location_fullname)
+
+    # match location_fullname:
+    #     case "Gouda_MBORijnland" | "Berkenwoude":
+    sheetname = "Ext"
+
+    ## load raw data from excel
+    data = (
+        pd.read_excel(
+            path_to_data,
+            sheet_name=sheetname,
+            skiprows=[0, 1, 2, 3, 4, 6, 7, 8],
+            usecols=[0] + [ord(letter) - 65 for letter in anchor_columns],
+            index_col=0,
+        )
+        .resample(period)
+        .mean()
+    )
+
+    new_column_names = []
+    for name in data.columns.tolist():
+        name = name.replace("MV -", "")
+        new_column_names.append(name + "-mv")
+
+    data.columns = new_column_names
+
+    data.to_csv(outputdir.joinpath(location_fullname, f"{location}_extensometer.csv"))
+
+    return data
+
+
 def update_extensometer_data(locations, period="h", plot_type="MS"):
 
     for location in locations:
@@ -297,6 +339,11 @@ def update_extensometer_data(locations, period="h", plot_type="MS"):
                     location, location_fullname, period=period
                 )
 
+            case "HGM" | "HGG" | "HGR":
+                extensometer_data = update_extensometer_data_hegewarren(
+                    location, location_fullname, period=period
+                )
+
     return extensometer_data
 
 
@@ -308,7 +355,9 @@ if __name__ == "__main__":
     # locations = ["BKW"]  # "HZW", "BKG", "CBW", "HZW",
     # locations = ["ROU09"]
 
-    locations = ["ROU"]  # ["M4T", "MMW"]
+    locations = ["HGM", "HGG", "HGR"]  # ["M4T", "MMW"]
+
+    print(locations)
 
     # location_fullnames = {
     #     "ALB": "Aldeboarn",

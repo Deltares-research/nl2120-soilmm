@@ -18,6 +18,9 @@ LOCATION_FULLNAMES = {
     "M4T": "Moordrecht-4eTochtweg",
     "MMW": "Moordrecht-Middelweg",
     "MSW": "Moordrecht-Spoorweglaan",
+    "HGM": "Hegewarren-Museum",
+    "HGG": "Hegewarren-Greppel",
+    "HGR": "Hegewarren-Ref",
 }
 
 GROUNDWATER_WELLS = {
@@ -261,6 +264,27 @@ EXTENSOMETER_DEPTHS = {
         "8.00 m-mv",
     ],
     "MSW": ["0.07 m-mv", "0.30 m-mv", "0.82 m-mv", "2.20 m-mv", "5.72 m-mv"],
+    "HGM": [
+        "0.07 m-mv",
+        "0.30 m-mv",
+        "0.80 m-mv",
+        "1.20 m-mv",
+        "2.20 m-mv",
+    ],
+    "HGG": [
+        "0.07 m-mv",
+        "0.30 m-mv",
+        "0.80 m-mv",
+        "1.40 m-mv",
+        "3.20 m-mv",
+    ],
+    "HGR": [
+        "0.07 m-mv",
+        "0.30 m-mv",
+        "0.80 m-mv",
+        "1.40 m-mv",
+        "3.20 m-mv",
+    ],
 }
 
 SOILPROFILE_DEPTHS = {
@@ -282,9 +306,13 @@ SOILPROFILE_DEPTHS = {
     "M4T": 6.20,
     "MMW": 8,
     "MSW": 7.85,
+    "HGM": 2.20,
+    "HGG": 3.20,
+    "HGR": 3.20,
 }
 
 SOILTYPES_ENGLISH = {
+    "veen, sterk kleiig": "peat, strongly clayey",
     "veen, kleiig": "peat, clayey",
     "klei": "clay",
     "veen": "peat",
@@ -294,12 +322,14 @@ SOILTYPES_ENGLISH = {
     "leem/zand": "loam/sand",
     "zand, gemixt met klei en/of silt": "sand, mixed \nwith clay and/or silt",
     "gyttja": "gyttja",
+    "veen, zandig": "peat, sandy",
 }
 
 # code to invert a dictionary:
 # inv_map = {v: k for k, v in my_map.items()}
 
 SOILTYPES_DUTCH = {
+    "peat, strongly clayey": "veen, sterk kleiig",
     "peat, clayey": "veen, kleiig",
     "clay": "klei",
     "peat": "veen",
@@ -309,6 +339,7 @@ SOILTYPES_DUTCH = {
     "loam/sand": "leem/zand",
     "sand, mixed \nwith clay and/or silt": "zand, gemixt met klei en/of silt",
     "gyttja": "gyttja",
+    "peat, sandy": "veen, zandig",
 }
 
 SOILTYPES_ENGLISH_REGIODEAL = {
@@ -344,6 +375,8 @@ SOILTYPES_COLORS = {
     "loam/sand": "darkorange",
     "sand, mixed \nwith clay and/or silt": "burlywood",
     "gyttja": "#5C4033",
+    "peat, strongly clayey": "olive",
+    "peat, sandy": "goldenrod",
 }
 
 SOILTYPES_COLORS_DUTCH = {
@@ -351,12 +384,14 @@ SOILTYPES_COLORS_DUTCH = {
     "klei, humeus": "yellowgreen",
     "veen": "sienna",
     "veen, kleiig": "darkgoldenrod",
+    "veen, sterk kleiig": "olive",
     "zand": "gold",
     "zand/leem": "orange",
     "zand, humeus": "darkkhaki",
     "leem/zand": "darkorange",
     "zand, gemixt met klei en/of silt": "burlywood",
     "gyttja": "#5C4033",
+    "veen, zandig": "goldenrod",
 }
 
 MONTHS = {

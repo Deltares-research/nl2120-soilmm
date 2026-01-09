@@ -33,16 +33,16 @@ from nl2120_soilmm.old_scripts.stats import get_trendline
 # locations = ["HZW"]  # "BKG"]  #
 # locations = ["ALB", "ASD", "ROU", "ZEG", "VLI", "DEM", "LW", "VEG", "ZH"]
 # locations = ["ZEG"]
-locations = ["ROU"]
+locations = ["HGM", "HGG", "HGR"]
 # locations = ["M4T", "MMW", "MSW"]
 # locations = ["VEG"]
-plot_type = "MS"
-plot_names = {
-    "RF": "Referentie",
-    "MP": "Drukdrainage",
-    "MS": "Waterinfiltratiesysteem",  # "Onderwaterdrainage",
-}
-plot_name = plot_names[plot_type]
+# plot_type = "MS"
+# plot_names = {
+#     "RF": "Referentie",
+#     "MP": "Drukdrainage",
+#     "MS": "Waterinfiltratiesysteem",  # "Onderwaterdrainage",
+# }
+# plot_name = plot_names[plot_type]
 
 trendline_months = (1, 2)
 
@@ -75,32 +75,34 @@ for location in locations:
             "M4T",
             "MMW",
             "MSW",
+            "HGM",
+            "HGG",
+            "HGR",
         ]:
             soilprofile_lithology, soilprofile_anchors = read_soilprofile(
-                location, location_fullname, plot_type=plot_type, language="dutch"
+                location, location_fullname, language="dutch"
             )
         elif location in ["GDA"]:
             soilprofile_lithology, soilprofile_anchors = read_soilprofile_regiodeal(
                 location, location_fullname
             )
 
-    extensometer_data = read_extensometer(location, plot_type=plot_type)
-    groundwater_data = read_gwlevel(location, plot_type=plot_type)
-    ditch_level_data = read_ditch_level(location, plot_type=plot_type)
-
-    surface_level = read_surface_level(location, plot_type=plot_type)
+    extensometer_data = read_extensometer(location)
+    # groundwater_data = read_gwlevel(location)
+    # ditch_level_data = read_ditch_level(location)
+    surface_level = read_surface_level(location)
 
     try:
-        filter_depths = read_filter_depths(location, plot_type=plot_type)
+        filter_depths = read_filter_depths(location)
         filter_depths_mv = surface_level - filter_depths
 
     except FileNotFoundError:
         print("The filter depths are not found")
 
-    if ditch_level_data is not None:
-        ditch_level_data = ditch_level_data.loc[
-            extensometer_data.first_valid_index() : extensometer_data.last_valid_index()
-        ]
+    # if ditch_level_data is not None:
+    #     ditch_level_data = ditch_level_data.loc[
+    #         extensometer_data.first_valid_index() : extensometer_data.last_valid_index()
+    #     ]
 
     match location:
         case "MSW":
@@ -258,10 +260,10 @@ for location in locations:
                     linewidth=0.7,
                 )
 
-    colors_gw = plt.cm.viridis_r(np.linspace(0, 1, len(groundwater_data.columns)))
-    # colors_gw = cmocean.cm.deep(np.linspace(0, 1, len(groundwater_data.columns)))
-    colors_gw = ["#90e0ef", "#00b4d8", "#03045e"]
-    # colors_gw = ["deepskyblue", "royalblue", "darkblue"]
+    # colors_gw = plt.cm.viridis_r(np.linspace(0, 1, len(groundwater_data.columns)))
+    # # colors_gw = cmocean.cm.deep(np.linspace(0, 1, len(groundwater_data.columns)))
+    # colors_gw = ["#90e0ef", "#00b4d8", "#03045e"]
+    # # colors_gw = ["deepskyblue", "royalblue", "darkblue"]
 
     nobv_labeltitles = [
         "Freatische grondwaterstand",
@@ -269,31 +271,31 @@ for location in locations:
         "Stijghoogte",
     ]
 
-    for i, well in enumerate(groundwater_data):
+    # for i, well in enumerate(groundwater_data):
 
-        match location:
-            case "MMW" | "M4T" | "MSW":
-                top_filter = filter_depths_mv.iloc[i].values[0]
-                bottom_filter = filter_depths_mv.iloc[i].values[-1]
-                labeltitle = f"filter depth: {bottom_filter:.0f} - {top_filter:.0f} cm below surface"
-            case _:
-                labeltitle = nobv_labeltitles[i]
-        axs[2, 0].plot(
-            groundwater_data[well],
-            label=labeltitle,
-            color=colors_gw[i],
-            linewidth=0.7,
-            zorder=1,
-        )
+    #     match location:
+    #         case "MMW" | "M4T" | "MSW":
+    #             top_filter = filter_depths_mv.iloc[i].values[0]
+    #             bottom_filter = filter_depths_mv.iloc[i].values[-1]
+    #             labeltitle = f"filter depth: {bottom_filter:.0f} - {top_filter:.0f} cm below surface"
+    #         case _:
+    #             labeltitle = nobv_labeltitles[i]
+    #     axs[2, 0].plot(
+    #         groundwater_data[well],
+    #         label=labeltitle,
+    #         color=colors_gw[i],
+    #         linewidth=0.7,
+    #         zorder=1,
+    #     )
 
-    if ditch_level_data is not None:
-        axs[2, 0].plot(
-            ditch_level_data,
-            label="Slootpeil",
-            color="blueviolet",
-            linewidth=0.7,
-            zorder=1,
-        )
+    # if ditch_level_data is not None:
+    #     axs[2, 0].plot(
+    #         ditch_level_data,
+    #         label="Slootpeil",
+    #         color="blueviolet",
+    #         linewidth=0.7,
+    #         zorder=1,
+    #     )
 
     for ax in axs[:, 0].flat:
 
@@ -471,7 +473,7 @@ for location in locations:
         ):
             suptitle_name = location_fullname
         case _:
-            suptitle_name = f"{location_fullname} {plot_name}"
+            suptitle_name = location_fullname
 
     fig.suptitle(
         suptitle_name,
@@ -499,6 +501,9 @@ for location in locations:
             | "M4T"
             | "MMW"
             | "MSW"
+            | "HGM"
+            | "HGG"
+            | "HGR"
         ):
             plot_type = ""
         case _:

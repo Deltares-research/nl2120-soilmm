@@ -49,6 +49,11 @@ def write_surface_level(location, location_fullname, plot_type="RF"):
                 r"n:/Projects/11210000/11210175/B. Measurements and calculations"
             )
             path_to_data = basedir.joinpath("Extensometers", f"{filename}.xlsm")
+        case "HGM" | "HGG" | "HGR":
+            basedir = Path(
+                r"n:/Projects/11210000/11210448/B. Measurements and calculations"
+            )
+            path_to_data = basedir.joinpath("Extensometers", f"{filename}.xlsm")
 
     if location == "ZEG":
         if plot_type == "MS":
@@ -72,6 +77,8 @@ def write_surface_level(location, location_fullname, plot_type="RF"):
             column_row = "C108"
         case "MMW":
             column_row = "C109"
+        case "HGM" | "HGG" | "HGR":
+            column_row = "C27"
 
     outputdir = Path(
         r"n:/Projects/11211000/11211391/B. Measurements and calculations/Bodembeweging/data/2-interim"
@@ -97,6 +104,9 @@ def write_surface_level(location, location_fullname, plot_type="RF"):
             | "MMW"
             | "M4T"
             | "MSW"
+            | "HGM"
+            | "HGG"
+            | "HGR"
         ):
             plot_type = ""
         case _:
@@ -120,7 +130,7 @@ if __name__ == "__main__":
     from nl2120_soilmm.constants import LOCATION_FULLNAMES
 
     # locations = ["ROU09"]  # ["ROU", "VLI", "ZEG"]
-    locations = ["ROU"]
+    locations = ["HGM", "HGG", "HGR"]
 
     # LOCATION_FULLNAMES = {
     #     "ALB": "Aldeboarn",
